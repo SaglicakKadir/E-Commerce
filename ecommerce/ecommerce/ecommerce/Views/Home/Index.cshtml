@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ecommerce.Models.Product>
+
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	string imagePath;
+}
+
+
+
+<h1>Merhaba</h1>
+<div style="display: flex; flex-wrap: wrap;display:inline; width:900px">
+	@foreach (var item in Model)
+	{
+		imagePath = "/Image/" + item.ProductId.ToString() + "-0.jpg";
+
+
+		<div class="card" style="display:inline-block; width:300px; flex:1 1 200px;margin-right:25px;margin-bottom:25px">
+			<a class="navbar-brand" style="font-size:24px" href="~/Home/Details/@item.ProductId">
+				<img src="@imagePath" alt="Denim Jeans" style="width:150px; height:300px">
+				<h1>@item.Brand.BrandName</h1>
+				<p class="price">@item.ProductPrice</p>
+				<p>@item.ProductRate</p>
+			</a>
+
+		</div>
+
+	}
+</div>

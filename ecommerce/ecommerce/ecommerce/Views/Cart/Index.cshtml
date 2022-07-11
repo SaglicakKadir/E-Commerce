@@ -1,0 +1,135 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	System.Collections.Generic.List<ecommerce.Controllers.CartController.CartProduct> cartProducts = (System.Collections.Generic.List<ecommerce.Controllers.CartController.CartProduct>)ViewData["product"];
+
+	string imagePath;
+	string cartEmpty = "style=display:none;font-size:35px";
+	string cartPayment="style=display:block;font-size:35px";
+}
+<script>
+
+	var globalProductId, globalProductCount;
+
+	
+
+	function CalculateCartTotal() {
+		if (globalProductCount == 0) {
+			var productRow = document.getElementById("productRow-" + globalProductId);
+			productRow.remove();
+		}
+		var subtotal = 0;
+		var itemTotal;
+		var itemTotals = document.getElementsByClassName("total");
+		for (i = 0; i < itemTotals.length; i++) {
+
+			itemTotal = itemTotals[i];
+			subtotal += parseFloat(itemTotal.innerHTML);
+		}
+		var cashTotal = document.getElementById("cash");
+		cashTotal.innerText = subtotal;
+		var subtotal = 0;
+		var counts = document.getElementsByClassName("counts");
+		var count;
+		for (i = 0; i < counts.length; i++) {
+			count = counts[i];
+			subtotal += parseInt(count.value);
+
+		}
+		var countTotal = document.getElementById("iconNumber");
+		countTotal.innerText = subtotal;
+
+		var emptyBasket = document.getElementById("emptyBasket");
+		if (subtotal == 0) {
+			emptyBasket.style.display = "block";
+		} else {
+			emptyBasket.style.display = "none";
+		}
+	}
+	function TotalCalculate(productId, productCount) {
+		globalProductId = productId;
+		globalProductCount = productCount;
+		$("#calc-" + productId).load("@Url.Action("CalculateTotal","Cart")/" + productId + "?count=" + productCount, CalculateCartTotal);
+	}
+
+</script>
+
+<h1>Index</h1>
+
+<table>
+	<thead>
+		<tr>
+			<th>
+				Ürün Göreseli
+			</th>
+			<th>
+				Ürün Bilgileri
+			</th>
+			<th>
+				Satıcı Bilgileri
+			</th>
+			<th>
+				Adet
+			</th>
+			<th>
+				Tutar
+			</th>
+			<th>
+				Ürünü Sil
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (ecommerce.Controllers.CartController.CartProduct item in cartProducts)
+		{
+			imagePath = "/Image/" + item.Product.ProductId.ToString() + "-0.jpg";
+
+
+
+			<tr id="productRow-@item.Product.ProductId">
+				<td>
+					<img src="@imagePath" width="150" height="130" />
+				</td>
+				<td>
+					@item.Product.Brand.BrandName <br> @item.Product.Description <br> @item.Product.ProductRate
+				</td>
+				<td>
+					@item.Product.Seller.SellerName <br> @item.Product.Seller.SellerRate
+				</td>
+				<td>
+
+					<input type="number" class="counts" id="itemCount-@item.Product.ProductId" onchange="TotalCalculate(@item.Product.ProductId,this.value)" value="@item.Count">
+
+				</td>
+				<td>
+					<span class="total" id="calc-@item.Product.ProductId">@item.Total</span>
+				</td>
+				<td>
+					<button class="forEmptyBasket" onclick="TotalCalculate(@item.Product.ProductId,0)"> - </button>
+				</td>
+			</tr>
+		}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td>
+				Ödenmesi Gereken Tutar:
+			</td>
+			<td>
+				<a href="~/Cart/EmptyBasket">Sepeti Boşalt</a>
+			</td>
+			<td>
+				<span id="cash">@ViewData["cartTotal"]</span>
+			</td>
+		</tr>
+	</tfoot>
+</table>
+<a href="~/">Alışverişe Devam Et</a>
+
+@if(cartProducts.Count==0)
+{
+	 cartPayment="style=display:none;font-size:35px";
+	 cartEmpty = "style=display:block;font-size:35px";
+}
+<div @cartEmpty id="emptyBasket">Sepetiniz Boştur</div>
+<a @cartPayment href="Payment/CheckLogIn">Ödemeye Geç</a>

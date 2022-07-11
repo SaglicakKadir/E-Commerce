@@ -1,0 +1,84 @@
+﻿@model IEnumerable<ecommerce.Models.Seller>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SellerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellerPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellerEmail)
+            </th>
+       @*     <th>
+                @Html.DisplayNameFor(model => model.SellerPassword)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Banned)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellerDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellerRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDeleted)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerEmail)
+            </td>
+        @*    <td>
+                @Html.DisplayFor(modelItem => item.SellerPassword)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Banned)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellerRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City.CityName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SellerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SellerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SellerId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
